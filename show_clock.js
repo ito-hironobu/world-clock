@@ -1,3 +1,6 @@
+// 東京の世界標準時との時差
+const TIMEDIF_TOKYO = 9;
+
 // 桁数が1桁だったら先頭に0を加えて2桁に調整する
 function set2fig(num) {
     var ret;
@@ -12,12 +15,12 @@ function set2fig(num) {
 // 「分」の「時」への繰り上がり処理
 function minUptoHour(minute){
     var ret = [];
-    if(minute>=0 && minute<60){
+    if(minute >= 0 && minute < 60){
         ret = [minute, 0];
-    }else if(minute<0){
-        ret = [minute+60, -1];
+    }else if(minute < 0){
+        ret = [minute + 60, -1];
     }else{
-        ret = [minute-60, 1];
+        ret = [minute - 60, 1];
     }
     return ret;
 }
@@ -25,56 +28,57 @@ function minUptoHour(minute){
 // 「時」の「日」への繰り上がり処理
 function hourUptoDay(hour){
     var ret = [];
-    if(hour>=0 && hour<24){
+    if(hour >= 0 && hour < 24){
         ret = [hour, 0];
-    }else if(hour<0){
-        ret = [hour+24, -1];
+    }else if(hour < 0){
+        ret = [hour + 24, -1];
     }else{
-        ret = [hour-24, 1];
+        ret = [hour - 24, 1];
     }
     return ret;
 }
 
 // 受け取ったタイムゾーンの時刻表示をリターン
-function showClock(timezone){
-    // 時間取得
-    var nowTime = new Date();
-    var UTC_Hour;
-    if(nowTime.getHours()-9 < 0){
-        UTC_Hour = nowTime.getHours() -9 + 24;
+function setClockToText(timezone, utc_time){
+    var timedif_hour = (timezone - timezone % 100) / 100;   // 430 なら 4 を取り出し
+    var timedif_min = timezone % 100;                       // 430 なら 30を取り出し
+    var min_and_uphour = minUptoHour(utc_time['minute'] + timedif_min);
+    var hour_and_upday = hourUptoDay(utc_time['hour'] + timedif_hour + min_and_uphour[1]);
+
+    return set2fig(hour_and_upday[0]) + "時" + set2fig(min_and_uphour[0]) + "分" + set2fig(utc_time['second']) + "秒";
+}
+
+// 世界標準時の「時・分・秒」を得る
+function getUtcTime(){
+    var now_time = new Date(); // 現在時刻取得
+    var utc_time = {}; // 世界標準時の「時・分・秒」格納用
+    if((now_time.getHours() - TIMEDIF_TOKYO) < 0){
+        utc_time['hour'] = now_time.getHours() - TIMEDIF_TOKYO + 24;
     }else{
-        UTC_Hour = nowTime.getHours() -9;
+        utc_time['hour'] = now_time.getHours() - TIMEDIF_TOKYO;
     }
-    var UTC_Min = nowTime.getMinutes();
-    var UTC_Sec = nowTime.getSeconds();
+    utc_time['minute'] = now_time.getMinutes();
+    utc_time['second'] = now_time.getSeconds();
 
-    var dif_hour = (timezone - timezone%100) / 100;
-    var dif_min = timezone % 100;
-    var min_and_uphour = minUptoHour(UTC_Min + dif_min);
-    var hour_and_upday = hourUptoDay(UTC_Hour + dif_hour + min_and_uphour[1]);
-
-    var Sec = set2fig(UTC_Sec);
-    var Min = set2fig(min_and_uphour[0]);
-    var Hour = set2fig(hour_and_upday[0]);
-
-    return Hour + "時" + Min + "分" + Sec + "秒";
+    return utc_time;
 }
 
 // 各パネルの時計部分に時刻を埋め込む
-function worldClock(){
+function showWorldClock(){
     var ary_idnum = [];
-    var num=0;
+    var num = 0;
     $.each($('.clock'), function(){
         var idstr = $(this).attr("id");
-        var idnum = idstr.match(/-?[0-9]+\.?[0-9]*/g);
+        var idnum = idstr.match(/-?[0-9]+/g);
         ary_idnum[num] = Number(idnum);
         num++;
     });
 
-    for(var i=0; i<num; i++){ // num == ary_idnum
-        $('#clock' + ary_idnum[i]).text(showClock(ary_idnum[i]));
+    var utc_time = getUtcTime(); // 「時・分・秒」の連想配列格納
+    for(var i = 0; i < num; i++){ // num == ary_idnum
+        $('#clock' + ary_idnum[i]).text(setClockToText(ary_idnum[i], utc_time));
     }
 }
 
 // 1秒ごとに時計を更新
-setInterval('worldClock()', 1000);
+setInterval('showWorldClock()', 1000);

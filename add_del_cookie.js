@@ -7,7 +7,7 @@ $(function(){
 
     // エンター押下時の追加
     $('#city_name').keypress(function(e){
-        if(e.which==13){
+        if(e.which == 13){
             addCity();
         }
     });
@@ -25,7 +25,7 @@ $(function(){
         var city_name = $(this).parents('.timezone').find('.city').attr("id");
         // パネルの要素がラスト１つかどうかをチェック
         var num_timezone = $(this).parents('.panel').find('.timezone').length;
-        if(num_timezone==1){ // ラスト要素でかつ
+        if(num_timezone == 1){ // ラスト要素でかつ
             if($('.panel').length != 1){ // ラストパネルでないなら
                 $(this).parents('.panel').remove();
                 $.removeCookie(city_name);////////////////////////
@@ -48,7 +48,7 @@ $(function(){
         $.removeCookie('num');
         $.cookie('num', num, {expires: 7});
     }
-    if($.cookie('num')==1){
+    if($.cookie('num') == 1){
         $.cookie("東京", "東京", {expires: 7});
     }
     //alert($.cookie('num'));

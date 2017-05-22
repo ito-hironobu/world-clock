@@ -1,8 +1,8 @@
 // 入力した都市名が存在するかチェック。あるなら(all_dataの行番号+1)を返す
 function checkExistCity(city){
     var result;
-    for(var i=0; i<all_data.length; i++){
-        if(city==all_data[i][1]){
+    for(var i = 0; i < all_data.length; i++){
+        if(city == all_data[i][1]){
             result = i + 1;
             break;
         }
@@ -16,10 +16,8 @@ function checkExistPanel(result_city_row){
     var result;
     // パネルを探す処理
     if($('#panel' + timezone).length){
-        //alert('Exist');
         result = true;
     }else{
-        //alert('nonExist');
         result = false;
     }
     return result;
@@ -30,10 +28,8 @@ function checkExistSameCity(result_city_row){
     var result;
     if($('#' + all_data[result_city_row][1]).length){
         result = true;
-        //alert('同名の都市がすでに存在します');
     }else{
         result = false;
-        //alert('同名の都市はありません');
     }
     return result;
 }
@@ -49,10 +45,8 @@ function addCity(){
             var timezone_num = all_data[result_city_row][0];
             var city = all_data[result_city_row][1];
             var country = all_data[result_city_row][2];
-            /////////////////////////////////////
             $.cookie(city, city, {expires: 7});
-            //alert('Cookie登録！');
-            /////////////////////////////////////
+
             // 入力された都市のタイムゾーンがパネルにすでにあるかチェック
             var result_timezone_panel = checkExistPanel(result_city_row); // true / false
             if(result_timezone_panel){
@@ -68,20 +62,22 @@ function addCity(){
             }else{
                 // 同じタイムゾーンパネルがないなら新しくパネルを作成
                 var ary_idnum = [];
-                var num=0;
+                var num = 0;
                 var set_num;
+                ///////////////////////////////////
                 $.each($('.panel'), function(){
                     var idstr = $(this).attr("id");
-                    var idnum = idstr.match(/-?[0-9]+\.?[0-9]*/g);
+                    var idnum = idstr.match(/-?[0-9]+/g);
                     ary_idnum[num] = Number(idnum);
                     num++;
                 });
-                for(var i=0; i<num; i++){ // num == ary_idnum
+                ///////////////////////////////////
+                for(var i = 0; i < num; i++){ // num == ary_idnum
                     if(timezone_num < ary_idnum[i]){
                         set_num = i;
                         break;
                     }
-                    if(i==(num-1)){
+                    if(i == (num-1)){
                         set_num = num;
                     }
                 }
@@ -109,10 +105,9 @@ function addCity(){
 function cookieShow(){
     if($.cookie()){
         for(var key in $.cookie()){
-            if(key=='num'){ continue; }
+            if(key == 'num'){ continue; }
             // 入力された都市の存在チェック
-            var result_city = checkExistCity($.cookie(key));
-            var result_city_row = result_city - 1; // 該当都市の行番号
+            var result_city_row = checkExistCity($.cookie(key)) - 1; // 該当都市の行番号
             var timezone_num = all_data[result_city_row][0];
             var city = all_data[result_city_row][1];
             var country = all_data[result_city_row][2];
@@ -131,7 +126,7 @@ function cookieShow(){
                 }
             }else{ // 同じタイムゾーンパネルがないなら新しくパネルを作成
                 var ary_idnum = [];
-                var num=0;
+                var num = 0;
                 var set_num;
                 // パネルが存在するなら、それぞれのパネルのid(数字)を取り出して配列に格納
                 if( $('.panel').length != 0 ){
@@ -142,12 +137,12 @@ function cookieShow(){
                         num++;
                     });
                     // タイムパネルを追加する場所を探索して、set_numに番号を入れる
-                    for(var i=0; i<num; i++){ // num == ary_idnum
+                    for(var i = 0; i < num; i++){ // num == ary_idnum
                         if(timezone_num < ary_idnum[i]){
                             set_num = i;
                             break;
                         }
-                        if(i==(num-1)){
+                        if(i == (num-1)){
                             set_num = num;
                         }
                     }
