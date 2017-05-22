@@ -67,11 +67,10 @@ body {
 .timezone .caption {
     font-size:		100%;
     text-align: 	center;
-    padding-bottom:	8px;
     color:			#fff;
 }
 .timezone .mask {
-    width:			89.7%;
+    width:			89.3%;
     position:		absolute;	/* 絶対位置指定 */
     top:			0;
     left:			0;
