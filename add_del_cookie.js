@@ -44,7 +44,7 @@ $(function(){
     if(!$.cookie('num')){
         $.cookie('num', 1, {expires: 7});
     }else{ // すでに$.cookie('num')があるならカウントアップ
-        var num = $.cookie('num');
+        num = $.cookie('num');
         num++;
         $.removeCookie('num');
         $.cookie('num', num, {expires: 7});
