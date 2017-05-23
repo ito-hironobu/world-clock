@@ -1,37 +1,31 @@
-// 入力した都市名が存在するかチェック。あるなら(all_dataの行番号+1)を返す
-function checkExistCity(city){
-    var result;
-    for(var i = 0; i < all_data.length; i++){
-        if(city == all_data[i][1]){
-            result = i + 1;
-            break;
+// 追加関数 ///////////////////////////////////////////
+function addCity(){
+    if($('.timezone').length < 10){ // 登録している都市数が１０未満ならば追加処理を行う
+        var city_name = $('#city_name').val(); // 入力テキスト取得
+
+        // 入力された都市が存在するのかチェック
+        var result_city = checkExistCity(city_name);
+        if(result_city){ // 入力された都市が存在すれば追加処理、なければスルー
+            var result_city_row = result_city - 1; // 該当都市の行番号
+            // 入力と同一の都市がすでに登録されていないかチェック。
+            var result_same_city = checkExistSameCity(result_city_row);
+            if(!result_same_city){
+                var timezone_num    = all_data[result_city_row][0];
+                var city            = all_data[result_city_row][1];
+                var country         = all_data[result_city_row][2];
+                $.cookie(city, city, {expires: 7}); // Cookie追加
+
+                if( checkExistPanel(result_city_row) ){ // 入力された都市のタイムゾーンパネルにすでにあるなら
+                    // パネルの中に追加
+                    addCityToPanel(timezone_num, city, country);
+                }else{　// 入力された都市のタイムゾーンパネルにないなら
+                    // パネルを作成し、中に都市を追加
+                    createTimePanel(timezone_num);
+                    addCityToPanel(timezone_num, city, country);
+                }
+            }
         }
     }
-    return result;
-}
-
-// 入力した都市名の該当するタイムゾーンパネルがすでにあるかチェック。あるならUTCとの時差を返す。
-function checkExistPanel(result_city_row){
-    var timezone = all_data[result_city_row][0];
-    var result;
-    // パネルを探す処理
-    if($('#panel' + timezone).length){
-        result = true;
-    }else{
-        result = false;
-    }
-    return result;
-}
-
-// 入力された都市名と同一の年がすでに登録されていないかチェック。
-function checkExistSameCity(result_city_row){
-    var result;
-    if($('#' + all_data[result_city_row][1]).length){
-        result = true;
-    }else{
-        result = false;
-    }
-    return result;
 }
 
 // タイムゾーンに都市と国を追加
@@ -83,35 +77,7 @@ function createTimePanel(timezone_num){
         .appendTo('#panel' + timezone_num);
 }
 
-// 追加関数 ///////////////////////////////////////////
-function addCity(){
-    if($('.timezone').length < 10){ // 登録している都市数が１０未満ならば追加処理を行う
-        var city_name = $('#city_name').val(); // 入力テキスト取得
 
-        // 入力された都市が存在するのかチェック
-        var result_city = checkExistCity(city_name);
-        if(result_city){ // 入力された都市が存在すれば追加処理、なければスルー
-            var result_city_row = result_city - 1; // 該当都市の行番号
-            // 入力と同一の都市がすでに登録されていないかチェック。
-            var result_same_city = checkExistSameCity(result_city_row);
-            if(!result_same_city){
-                var timezone_num    = all_data[result_city_row][0];
-                var city            = all_data[result_city_row][1];
-                var country         = all_data[result_city_row][2];
-                $.cookie(city, city, {expires: 7}); // Cookie追加
-
-                if( checkExistPanel(result_city_row) ){ // 入力された都市のタイムゾーンパネルにすでにあるなら
-                    // パネルの中に追加
-                    addCityToPanel(timezone_num, city, country);
-                }else{　// 入力された都市のタイムゾーンパネルにないなら
-                    // パネルを作成し、中に都市を追加
-                    createTimePanel(timezone_num);
-                    addCityToPanel(timezone_num, city, country);
-                }
-            }
-        }
-    }
-}
 
 // Cookieを使って復元する処理 ////////////////////////
 function restoreByCookie(){
