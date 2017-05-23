@@ -1,5 +1,5 @@
 // 追加関数 ///////////////////////////////////////////
-function addCity(){
+function addCitypanel(){
     if($('.timezone').length < 10){ // 登録している都市数が１０未満ならば追加処理を行う
         var city_name = $('#city_name').val(); // 入力テキスト取得
 

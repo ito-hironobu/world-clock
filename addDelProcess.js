@@ -2,19 +2,19 @@
 $(function(){
     // 追加ボタン　　　クリック時の追加
     $('#add').click(function(){
-        addCity();
+        addCitypanel();
     });
 
     // エンター押下時の追加
     $('#city_name').keypress(function(e){
         if(e.which == 13){
-            addCity();
+            addCitypanel();
         }
     });
 
     /*// オートコンプリート欄クリック時の追加
      $('//').on('//', function(){
-     addCity();
+     addCitypanel();
      });
      */
 });
