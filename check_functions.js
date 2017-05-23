@@ -10,7 +10,7 @@ function checkExistCity(city){
     return result;
 }
 
-// 入力された都市名と同一の年がすでに登録されていないかチェック。
+// 入力された都市名と同一の都市がすでに登録されていないかチェック。
 function checkExistSameCity(result_city_row){
     var result;
     if($('#' + all_data[result_city_row][1]).length){
