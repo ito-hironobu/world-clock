@@ -14,6 +14,5 @@ $(function(){
         $.cookie("東京", "東京", {expires: 7});
     }
     restoreByCookie(); // Cookieを使って世界時計を復元
-    alert($.cookie());
 });
 
