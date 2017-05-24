@@ -19,7 +19,6 @@ function createXMLHttpRequest() {
 
 function createArray(csvData) {
     var tempArray = csvData.split("\n");
-    var timezoneData = new Array();
     for(var i = 0; i<tempArray.length;i++){
         timezoneData[i] = tempArray[i].split(",");
     }
