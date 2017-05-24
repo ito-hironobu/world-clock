@@ -6,9 +6,9 @@ function restoreByCookie(){
 
         // checkExistCity関数で、Cookieに登録された都市の行番号抽出
         var result_city_row = checkExistCity($.cookie(key)) - 1;
-        var timezone_num    = all_data[result_city_row][0];
-        var city            = all_data[result_city_row][1];
-        var country         = all_data[result_city_row][2];
+        var timezone_num    = timezoneData[result_city_row][0];
+        var city            = timezoneData[result_city_row][1];
+        var country         = timezoneData[result_city_row][2];
 
         if( checkExistPanel(result_city_row) ){ // 入力された都市のタイムゾーンパネルにすでにあるなら
             // パネルの中に追加
